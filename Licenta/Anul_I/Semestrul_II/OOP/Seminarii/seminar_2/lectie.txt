@@ -1,0 +1,23 @@
+O clasa are doua lucrur :
+    - atribute
+    - metode 
+
+
+Syntaxa:
+class NumeClasa {
+    public:
+        int culoare;
+        int materia;
+    protecter:
+    private:
+        int timestamp;
+        bool termite;
+
+}
+
+
+Constructor :
+    numele clasei fara return tipe
+Destructor :
+    ca si constructor cu ~ in fata ( nu primeste EVER parametri ! )
+
