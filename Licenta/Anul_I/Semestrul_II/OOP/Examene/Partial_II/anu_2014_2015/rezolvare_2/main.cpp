@@ -1,33 +1,51 @@
-#include <string>
-#include <iostream>
-#include <string.h>
-#include <stdlib.h>
-#include<vector>
-
+#include "Propozitie.h"
+#include "stdio.h"
 using namespace std;
+int main(void)
 
-bool splitString(string input, string delimiter)
-{
-	char *pch;
-	char *str = (char*)input.c_str();
-	int k = 0;
-	pch = strtok(str, delimiter.c_str());
-	while (pch != NULL)
-	{
-		if (atoi(pch) >= 10)
-			k = 1;
-		pch = strtok(NULL, delimiter.c_str());
-	}
-	if (k == 0)
-		return true;
-	return false;
-}
+{ 
 
-int main()
-{
-	string str = "1+2+3-4-10";
+	Propozitie p1,p2,p3;
 
-	cout << splitString(str,"+-");
+	if (p1.SetPropozitie("Ana are mere")==false)
 
-	return 0;
+		printf("Propozitie incorecta\n");
+
+	
+
+	if (p1.SetPropozitie("   Ana    are     mere   .")==false)
+
+		printf("Propozitie incorecta (2)\n");
+
+	else
+
+		printf("Cuvinte = %d\n",p1.GetCount());
+
+	
+
+	printf("%d\n",p1.ContainsWord("are"));
+
+	for (int tr=0;tr<p1.GetCount();tr++)
+
+		printf("Word[%d] = %s\n",tr,p1.GetWord(tr));
+
+
+
+	p2.SetPropozitie("are mene Ana.");
+
+	printf("%d\n",p1.HasSameWords(p2));
+
+
+
+	p3.SetPropozitie("Ana are mere rosii.");
+
+	printf("%d\n",p3.Contains(p1));
+
+
+
+	p3.SetPropozitie("Ana                  are                                  mere    .");
+
+	printf("%d\n",p1.IsIdentical(p3));
+
+    return 0;
 }

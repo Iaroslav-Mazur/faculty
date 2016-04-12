@@ -3,8 +3,8 @@
 #include<cstring>
 
 using namespace std;
-#ifndef AbstractPropozitie
-#define AbstractPropozitie
+#ifndef AbstractPropozitie_H
+#define AbstractPropozitie_H
 class AbstractPropozitie
 {
 public:

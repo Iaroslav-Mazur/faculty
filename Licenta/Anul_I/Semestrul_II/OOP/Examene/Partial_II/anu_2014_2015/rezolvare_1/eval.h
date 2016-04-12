@@ -4,8 +4,8 @@
 #include <string>
 using namespace std;
 
-// class Eval: public AbstractEval {
-class Eval {
+class Eval: public AbstractEval {
+// class Eval {
     private:
         string expr;
         string operators;
