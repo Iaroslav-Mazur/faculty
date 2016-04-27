@@ -1,0 +1,32 @@
+Se doreste implementarea unor clase pentru a lucra cu o baza de date de studenti la licenta si la master.
+
+Studentii vor fi cititi dintr-un fisier care va avea urmatorul format (vedeti students.txt):
+
+<nume_student1>
+<varsta1>
+<tip_student1> 	//Poate fi BSC (student la licenta) sau MSC (student la master)
+<materie1> <nota1>, <materie2> <nota2>, etc..
+<nume_student2>
+<varsta2>
+<tip_student2>
+…. Etc
+
+Baremul precum si explicatiile le gasiti in fisierul Header.h.
+Realizati implementarea metodelor in fisierul Source.cpp.
+De asemenea, aveti la dispozitie si documentatia STL pe care o puteti vizualiza deschizand cu un browser fisierul index.html din directorul STL_doc.
+
+Se acorda 2p pentru compilarea si rularea corecta a programului. 
+Daca totul este implementat corect programul ar trebui sa afiseze urmatoarele lucruri pe ecran:
+
+LICENTA:
+Popa Alexandru
+Filip Anton
+Marius Dudea
+MASTER:
+Radu Popescu
+Alex Ionescu
+
+
+SO 10
+POO 9
+FAI 8

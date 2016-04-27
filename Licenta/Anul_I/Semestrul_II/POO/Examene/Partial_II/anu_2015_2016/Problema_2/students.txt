@@ -1,0 +1,28 @@
+Popa Alexandru
+20
+BSC
+SO 10, POO 9, FAI 8, SD 9
+Filip Anton
+21
+BSC
+TW 9,GPC 10,SI 7
+Dragos Amariei
+19
+BSC
+IP 10,SD 9,Matematica 8,Sport 10,PA 4
+Marius Dudea
+21
+BSC
+TW 8,GPC 8,SI 9
+Alex Ionescu
+21
+MSC
+CCE 10,AHC 8, CA 9
+Radu Popescu
+22
+MSC
+NetSec 10, SecProtocols 10, SVS 9
+Ion Andrei
+22
+MSC
+NetSec 8, SecProtocols 9, SVS 4
