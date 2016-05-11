@@ -1,0 +1,20 @@
+
+Folosind teorema master avem :
+        |  Theta(1),   n = 1
+T(n) =  |
+        | 2 * T(n/2) + Theta(n), n > 1
+
+Folosind teorema master unde 
+a = 2 ( coeficientul lui T(n/2) )
+b = 2 ( numaratorul fractiei n/2 )
+si functia Theta(n) asimtotic pozitiva
+observam ca ne incadram in cazul 2 in care 
+
+Theta(n) = O( n ^ (log in baza b din a) )
+adica Theta(n) = O(n) 
+atunci:
+    T(n) = Theta(n ^ ( log in baza b din a )  * log n)
+daca facem inlocuirile :
+    T(n) = Theta(n ^ ( log in baza 2 din 2 )  * log n)
+adica :
+    T(n) = Theta(n * log n)
