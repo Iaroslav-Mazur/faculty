@@ -1,12 +1,6 @@
 #include <unistd.h> // pipe, fork
-#include <fcntl.h> // pentru LOCK's
-#include <errno.h> // pentru errno
-#include <string.h> // pentru memset
-#include <sys/types.h> // open
-#include <sys/stat.h> // open
-#include <sys/wait.h> // open
-#include <stdio.h> // readline
-#include <stdlib.h> //readline
+#include <fcntl.h>
+#include <stdio.h>
 
 
 int main(){ 
