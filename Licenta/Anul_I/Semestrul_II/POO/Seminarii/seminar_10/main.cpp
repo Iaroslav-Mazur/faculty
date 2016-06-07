@@ -1,7 +1,8 @@
 // #include "singelton.h"
-#include "singelton.cpp"
-#include "singelton2.cpp"
+#include "singelton.h"
+#include "singelton2.h"
 #include <iostream>
+
 
 int main(){
     Singeltone *p1 = Singeltone::newClass();
