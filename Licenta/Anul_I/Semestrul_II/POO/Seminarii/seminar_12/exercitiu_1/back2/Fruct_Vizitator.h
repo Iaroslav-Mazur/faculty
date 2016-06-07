@@ -1,0 +1,2 @@
+class Fruct;
+class Vizitator;
