@@ -1,66 +1,50 @@
 #!/usr/bin/env python
 """
 Tema 0 la Algoritmi Genetici.
+Autor: Micu Matei-Marius
+Grupa: B6
 """
 from __future__ import print_function
+import argparse
+import sys
 
-import abc
-
-import six
-
-import random
-
-INTERVAL = [-10, 10]
-RETRY = 10000
+import functions
+# import functools
+import runner
 
 
-@six.add_metaclass(abc.ABCMeta)
-class Function(object):
-    def __init__(self, interval, name, nr_args):
-        """Init a function object.
+def get_parser(alg):
+    """Get the argument parser."""
+    help_string = "Name of a function, this can be: {} ".format(
+        ", ".join(alg.get_function_names))
+    pars = argparse.ArgumentParser()
+    pars.add_argument("-f", "--function", type=alg.check_valid,
+                      help=help_string, required=True)
 
-        :param interval:
-            Domeniul functiei data ca o lista, sau tuple de tipul
-            (start, finish) si va fi interpretat ca [start, finish].
-        :param name:
-            Numele functiei.
-        :param nr_args:
-            Number of argument for the function body.
-        """
-        self._interval = interval
-        self._name = name
-        self._nr_args = nr_args
-
-    @abc.abstractmethod
-    def __call__(self, *args):
-        """Function body.
-
-        :pram *args:
-            All the arguments needed for the function expresion
-
-        :rtype: float
-        """
-        pass
+    return pars
 
 
-def Runner(object):
-    """Runner object that implement the optimization algorithm."""
-
-    def __init__(self):
-        """Initialize the runner object."""
-
-
-def f(*args):
-    return (args[0] + 2 * args[1] - 7) ** 2 + (2*args[0] + args[1] - 5) ** 2
+def add_functions(alg):
+    """Add the function to the algorithm."""
+    alg.add_function(functions.BoothFunction)
+    alg.add_function(functions.BohachevskyFunction1)
+    alg.add_function(functions.BohachevskyFunction2)
+    alg.add_function(functions.BohachevskyFunction3)
 
 
-def run():
-    min_val = 100
-    for _ in range(RETRY):
-        rez = f(random.randint(*INTERVAL), random.randint(*INTERVAL))
-        min_val = rez if min_val > rez else min_val
-    print("Val :", min_val)
+def main():
+    """Main function."""
+    algo = runner.Algorithm()
+    add_functions(algo)
 
+    parser = get_parser(algo)
+    args = parser.parse_args(sys.argv[1:])
+
+    if args.function:
+        guess, function = algo.alg(args.function)
+
+        print("We got: {}".format(guess))
+        print("The corect values are {}".format(function.correct_values))
 
 if __name__ == "__main__":
-    run()
+    main()

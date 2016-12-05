@@ -1,0 +1,3 @@
+[console_scripts]
+ag_frame = ag_frame.command_line:main
+
