@@ -1,0 +1,1 @@
+a ^ (2 * n + 1) u, u \in (c,b) +, u are macar un c  se termina cu bb, n>= 0, vreau ca rezultatele sa fie intr-un fisier

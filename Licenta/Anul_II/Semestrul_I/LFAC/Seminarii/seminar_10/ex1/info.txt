@@ -1,0 +1,4 @@
+ 2014  lex ex1.l  # compilam lex
+ 2016  yacc -d ex1.y # -d pentru header
+ 2018  gcc lex.yy.c y.tab.c -ll -ly # optinem executabilul
+

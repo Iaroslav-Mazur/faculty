@@ -1,0 +1,1 @@
+L = uc^(3k +1) , u={a,b}* , u contine abb, k >= 0

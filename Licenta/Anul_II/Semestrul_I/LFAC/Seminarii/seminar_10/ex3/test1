@@ -1,0 +1,6 @@
+int @a;
+char @xyz;
+begin_progr
+@f(12);
+@n:=@f;
+end_progr
