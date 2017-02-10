@@ -634,7 +634,7 @@ int main(){
             found = true;
             write(sockp[0], buff, strlen(buff));
             write(pfd[1], buff, strlen(buff));
-            continue;
+            /* continue; */
         }
         // ==== 
         if(strncmp(buff, MYSTAT, strlen(MYSTAT)) ==0 &&  found  == false){
