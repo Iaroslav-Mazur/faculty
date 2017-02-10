@@ -1,0 +1,29 @@
+begin_progr
+>librarie<
+>librarie<
+
+intreg $asa, $k:=0;
+
+void main()
+inceput:
+	intreg $x, $y:=666, $z;
+	$x:=8+9*$k:+++3;
+	print($x);
+	$asa:=($asa*$x);
+	print($asa);
+	$z:=$asa:++;
+	print($asa);
+	print($z);
+	$x:=palindrom($y);
+	print($x);
+	$x:=oglindit(259+oglindit(14));
+	print($x);
+	$x:=$x--(cifra_control(78));
+	print(-(-$x)*2);
+	print(56);
+	$k:=medie_aritmetica($x,$y);
+	print($k);
+	<>: $zar:=9;
+	print(medie_aritmetica(57,35)/cifra_control(246));
+final.
+end_progr

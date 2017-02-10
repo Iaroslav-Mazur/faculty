@@ -1,0 +1,91 @@
+begin_progr
+>anarar<
+>afa<
+
+intreg $asa, $af, $v[100], $a[10][10];
+real $rel, $v1[100];
+charac $c, $vect[100];
+sir $string;
+
+class A
+inceput:
+	priv
+	char $c;
+	intreg $in:=52, $vect[100], $m[10][10];
+	real const $r:=-90.78;
+	A();
+	A(intreg $x);
+	A(real $x, charac $c);
+	~A(intreg $z);
+	vid afisare();
+	intreg calcul(intreg $x, charac $y)
+	inceput:
+		$x:=0.425;
+	final.
+final.
+
+intreg A:calcul(intreg $x, charac $y)
+inceput:
+	ret $x:+$y;
+final.
+
+vid afis(intreg $x);
+
+charac main()
+inceput:
+	intreg $x, $y;
+	charac $chr;
+	sir $str:="";
+	A $ob1, $ob4(), $ob2($a,$b), $ob3($a,114,fct($dd));
+	$chr:='a';
+	$str:="ana are mere";
+	$x:=4:%$j;
+	$y:=afis();
+	$ob1:=make(23);
+	$y:=make89(($a:+$j):*5:/$f:%($c:-$d),$x,$y,afis());
+	acces(($a:+$j):*5:/$f:%($c:-$d),const $x,$y,afis());
+	$z:=$d:-$a:*($d:+$f):/($s:-$t);
+	$x:=$x:- -$y;
+	$g[8][2]:=$h[4];
+	$y:=-($a[0][1]:*$b[9]);
+	$v[9]:=$k;
+	$k:=$v[14];
+	daca (_!_($x_>=_10) _||_ $y_<_$r) ret "E ok!";
+        altfel
+                inceput:
+                        $x:=$y;
+                        ret "Acum e ok!";
+                final.
+	pentru ($i:=1; $i_<=_$n _&&_ $ok_==_1; $i:++)
+	inceput:
+		cat_timp (_!_($ok_==_1))
+		inceput:
+			$t:=$o;
+			escape;
+			daca ($t_<=_10) $ok:=1;
+		final.
+	final.
+	pentru (;;$i:=$i:+5)
+	inceput:
+		$x:=4;
+	final.
+	daca ($nume_==_"EXEC") executa
+				inceput:
+					$ok:=4;
+					$s:="joh";
+					$g:=$ob3.calcul($f);
+					$h:=$ob2.$r;
+				final.
+			cat_timp (_!_($x_>=_0) _||_ ($y_<_10 _&&_ $z_==_9));
+	altfel 
+	inceput:
+		daca ($n_<_0 _&&_ _!_($n_>=_0)) $n:=-$n;
+		altfel
+		inceput:
+			$n:=$n:*$n;
+			$n:--;
+			ret -(-$n:/-$x);
+		final.
+	final.
+final.
+end_progr

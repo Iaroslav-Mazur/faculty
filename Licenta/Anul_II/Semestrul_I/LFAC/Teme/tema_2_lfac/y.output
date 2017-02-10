@@ -1,0 +1,1295 @@
+   0  $accept : program $end
+
+   1  program : BGINP librarii corp ENDP
+
+   2  librarii : librarii LIBRARIE
+   3           | LIBRARIE
+
+   4  corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc
+   5       | 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc
+
+   6  variab_globala : ID ASSIGN exp
+   7                 | ID
+
+   8  variabile_globale : variabile_globale ',' variab_globala
+   9                    | variab_globala
+
+  10  declaratii_globale : declaratie_globala ';'
+  11                     | declaratii_globale declaratie_globala ';'
+
+  12  declaratie_globala : TIP variabile_globale
+
+  13  variab : ID ASSIGN exp
+  14         | ID
+
+  15  variabile : variabile ',' variab
+  16            | variab
+
+  17  declaratii : declaratie
+  18             | declaratii declaratie
+
+  19  declaratie : TIP variabile
+
+  20  bloc : BGINB list ENDB
+  21       | statement
+
+  22  list : statement
+  23       | list statement
+
+  24  statement : declaratii ';'
+  25            | ID ASSIGN exp ';'
+  26            | ID INC ';'
+  27            | ID DEC ';'
+  28            | PRINT '(' exp ')' ';'
+  29            | PRINT '(' ID ')' ';'
+
+  30  exp : '(' exp ')'
+  31      | MINUS '(' exp ')'
+  32      | exp '+' exp
+  33      | exp '-' exp
+  34      | exp '*' exp
+  35      | exp '/' exp
+  36      | exp '%' exp
+  37      | ID
+  38      | MINUS ID
+  39      | INTG
+  40      | function
+
+  41  function : AVG '(' exp ',' exp ')'
+  42           | PALINDROM '(' exp ')'
+  43           | OGLINDIT '(' exp ')'
+  44           | POWER2 '(' exp ')'
+  45           | CIFRA_CONTROL '(' exp ')'
+
+state 0
+	$accept : . program $end  (0)
+
+	BGINP  shift 1
+	.  error
+
+	program  goto 2
+
+
+state 1
+	program : BGINP . librarii corp ENDP  (1)
+
+	LIBRARIE  shift 3
+	.  error
+
+	librarii  goto 4
+
+
+state 2
+	$accept : program . $end  (0)
+
+	$end  accept
+
+
+state 3
+	librarii : LIBRARIE .  (3)
+
+	.  reduce 3
+
+
+state 4
+	program : BGINP librarii . corp ENDP  (1)
+	librarii : librarii . LIBRARIE  (2)
+
+	TIP  shift 5
+	LIBRARIE  shift 6
+	'v'  shift 7
+	.  error
+
+	corp  goto 8
+	declaratii_globale  goto 9
+	declaratie_globala  goto 10
+
+
+state 5
+	declaratie_globala : TIP . variabile_globale  (12)
+
+	ID  shift 11
+	.  error
+
+	variab_globala  goto 12
+	variabile_globale  goto 13
+
+
+state 6
+	librarii : librarii LIBRARIE .  (2)
+
+	.  reduce 2
+
+
+state 7
+	corp : 'v' . 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (5)
+
+	'o'  shift 14
+	.  error
+
+
+state 8
+	program : BGINP librarii corp . ENDP  (1)
+
+	ENDP  shift 15
+	.  error
+
+
+state 9
+	corp : declaratii_globale . 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (4)
+	declaratii_globale : declaratii_globale . declaratie_globala ';'  (11)
+
+	TIP  shift 5
+	'v'  shift 16
+	.  error
+
+	declaratie_globala  goto 17
+
+
+state 10
+	declaratii_globale : declaratie_globala . ';'  (10)
+
+	';'  shift 18
+	.  error
+
+
+state 11
+	variab_globala : ID . ASSIGN exp  (6)
+	variab_globala : ID .  (7)
+
+	ASSIGN  shift 19
+	','  reduce 7
+	';'  reduce 7
+
+
+state 12
+	variabile_globale : variab_globala .  (9)
+
+	.  reduce 9
+
+
+state 13
+	variabile_globale : variabile_globale . ',' variab_globala  (8)
+	declaratie_globala : TIP variabile_globale .  (12)
+
+	','  shift 20
+	';'  reduce 12
+
+
+state 14
+	corp : 'v' 'o' . 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (5)
+
+	'i'  shift 21
+	.  error
+
+
+state 15
+	program : BGINP librarii corp ENDP .  (1)
+
+	.  reduce 1
+
+
+state 16
+	corp : declaratii_globale 'v' . 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (4)
+
+	'o'  shift 22
+	.  error
+
+
+state 17
+	declaratii_globale : declaratii_globale declaratie_globala . ';'  (11)
+
+	';'  shift 23
+	.  error
+
+
+state 18
+	declaratii_globale : declaratie_globala ';' .  (10)
+
+	.  reduce 10
+
+
+state 19
+	variab_globala : ID ASSIGN . exp  (6)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 34
+
+
+state 20
+	variabile_globale : variabile_globale ',' . variab_globala  (8)
+
+	ID  shift 11
+	.  error
+
+	variab_globala  goto 35
+
+
+state 21
+	corp : 'v' 'o' 'i' . 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (5)
+
+	'd'  shift 36
+	.  error
+
+
+state 22
+	corp : declaratii_globale 'v' 'o' . 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (4)
+
+	'i'  shift 37
+	.  error
+
+
+state 23
+	declaratii_globale : declaratii_globale declaratie_globala ';' .  (11)
+
+	.  reduce 11
+
+
+state 24
+	exp : ID .  (37)
+
+	.  reduce 37
+
+
+state 25
+	exp : INTG .  (39)
+
+	.  reduce 39
+
+
+state 26
+	exp : MINUS . '(' exp ')'  (31)
+	exp : MINUS . ID  (38)
+
+	ID  shift 38
+	'('  shift 39
+	.  error
+
+
+state 27
+	function : AVG . '(' exp ',' exp ')'  (41)
+
+	'('  shift 40
+	.  error
+
+
+state 28
+	function : PALINDROM . '(' exp ')'  (42)
+
+	'('  shift 41
+	.  error
+
+
+state 29
+	function : OGLINDIT . '(' exp ')'  (43)
+
+	'('  shift 42
+	.  error
+
+
+state 30
+	function : CIFRA_CONTROL . '(' exp ')'  (45)
+
+	'('  shift 43
+	.  error
+
+
+state 31
+	function : POWER2 . '(' exp ')'  (44)
+
+	'('  shift 44
+	.  error
+
+
+state 32
+	exp : '(' . exp ')'  (30)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 45
+
+
+state 33
+	exp : function .  (40)
+
+	.  reduce 40
+
+
+state 34
+	variab_globala : ID ASSIGN exp .  (6)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	','  reduce 6
+	';'  reduce 6
+
+
+state 35
+	variabile_globale : variabile_globale ',' variab_globala .  (8)
+
+	.  reduce 8
+
+
+state 36
+	corp : 'v' 'o' 'i' 'd' . 'm' 'a' 'i' 'n' '(' ')' bloc  (5)
+
+	'm'  shift 51
+	.  error
+
+
+state 37
+	corp : declaratii_globale 'v' 'o' 'i' . 'd' 'm' 'a' 'i' 'n' '(' ')' bloc  (4)
+
+	'd'  shift 52
+	.  error
+
+
+state 38
+	exp : MINUS ID .  (38)
+
+	.  reduce 38
+
+
+state 39
+	exp : MINUS '(' . exp ')'  (31)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 53
+
+
+state 40
+	function : AVG '(' . exp ',' exp ')'  (41)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 54
+
+
+state 41
+	function : PALINDROM '(' . exp ')'  (42)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 55
+
+
+state 42
+	function : OGLINDIT '(' . exp ')'  (43)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 56
+
+
+state 43
+	function : CIFRA_CONTROL '(' . exp ')'  (45)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 57
+
+
+state 44
+	function : POWER2 '(' . exp ')'  (44)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 58
+
+
+state 45
+	exp : '(' exp . ')'  (30)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 59
+	.  error
+
+
+state 46
+	exp : exp '+' . exp  (32)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 60
+
+
+state 47
+	exp : exp '-' . exp  (33)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 61
+
+
+state 48
+	exp : exp '*' . exp  (34)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 62
+
+
+state 49
+	exp : exp '/' . exp  (35)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 63
+
+
+state 50
+	exp : exp '%' . exp  (36)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 64
+
+
+state 51
+	corp : 'v' 'o' 'i' 'd' 'm' . 'a' 'i' 'n' '(' ')' bloc  (5)
+
+	'a'  shift 65
+	.  error
+
+
+state 52
+	corp : declaratii_globale 'v' 'o' 'i' 'd' . 'm' 'a' 'i' 'n' '(' ')' bloc  (4)
+
+	'm'  shift 66
+	.  error
+
+
+state 53
+	exp : MINUS '(' exp . ')'  (31)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 67
+	.  error
+
+
+state 54
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : AVG '(' exp . ',' exp ')'  (41)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	','  shift 68
+	.  error
+
+
+state 55
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : PALINDROM '(' exp . ')'  (42)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 69
+	.  error
+
+
+state 56
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : OGLINDIT '(' exp . ')'  (43)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 70
+	.  error
+
+
+state 57
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : CIFRA_CONTROL '(' exp . ')'  (45)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 71
+	.  error
+
+
+state 58
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : POWER2 '(' exp . ')'  (44)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 72
+	.  error
+
+
+state 59
+	exp : '(' exp ')' .  (30)
+
+	.  reduce 30
+
+
+state 60
+	exp : exp . '+' exp  (32)
+	exp : exp '+' exp .  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	TIP  reduce 32
+	'+'  reduce 32
+	'-'  reduce 32
+	')'  reduce 32
+	','  reduce 32
+	';'  reduce 32
+
+
+state 61
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp '-' exp .  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	TIP  reduce 33
+	'+'  reduce 33
+	'-'  reduce 33
+	')'  reduce 33
+	','  reduce 33
+	';'  reduce 33
+
+
+state 62
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp '*' exp .  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	.  reduce 34
+
+
+state 63
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp '/' exp .  (35)
+	exp : exp . '%' exp  (36)
+
+	.  reduce 35
+
+
+state 64
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	exp : exp '%' exp .  (36)
+
+	.  reduce 36
+
+
+state 65
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' . 'i' 'n' '(' ')' bloc  (5)
+
+	'i'  shift 73
+	.  error
+
+
+state 66
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' . 'a' 'i' 'n' '(' ')' bloc  (4)
+
+	'a'  shift 74
+	.  error
+
+
+state 67
+	exp : MINUS '(' exp ')' .  (31)
+
+	.  reduce 31
+
+
+state 68
+	function : AVG '(' exp ',' . exp ')'  (41)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 75
+
+
+state 69
+	function : PALINDROM '(' exp ')' .  (42)
+
+	.  reduce 42
+
+
+state 70
+	function : OGLINDIT '(' exp ')' .  (43)
+
+	.  reduce 43
+
+
+state 71
+	function : CIFRA_CONTROL '(' exp ')' .  (45)
+
+	.  reduce 45
+
+
+state 72
+	function : POWER2 '(' exp ')' .  (44)
+
+	.  reduce 44
+
+
+state 73
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' 'i' . 'n' '(' ')' bloc  (5)
+
+	'n'  shift 76
+	.  error
+
+
+state 74
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' . 'i' 'n' '(' ')' bloc  (4)
+
+	'i'  shift 77
+	.  error
+
+
+state 75
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+	function : AVG '(' exp ',' exp . ')'  (41)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 78
+	.  error
+
+
+state 76
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' . '(' ')' bloc  (5)
+
+	'('  shift 79
+	.  error
+
+
+state 77
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' . 'n' '(' ')' bloc  (4)
+
+	'n'  shift 80
+	.  error
+
+
+state 78
+	function : AVG '(' exp ',' exp ')' .  (41)
+
+	.  reduce 41
+
+
+state 79
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' . ')' bloc  (5)
+
+	')'  shift 81
+	.  error
+
+
+state 80
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' . '(' ')' bloc  (4)
+
+	'('  shift 82
+	.  error
+
+
+state 81
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' . bloc  (5)
+
+	TIP  shift 83
+	ID  shift 84
+	BGINB  shift 85
+	PRINT  shift 86
+	.  error
+
+	bloc  goto 87
+	declaratii  goto 88
+	declaratie  goto 89
+	statement  goto 90
+
+
+state 82
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' . ')' bloc  (4)
+
+	')'  shift 91
+	.  error
+
+
+state 83
+	declaratie : TIP . variabile  (19)
+
+	ID  shift 92
+	.  error
+
+	variab  goto 93
+	variabile  goto 94
+
+
+state 84
+	statement : ID . ASSIGN exp ';'  (25)
+	statement : ID . INC ';'  (26)
+	statement : ID . DEC ';'  (27)
+
+	ASSIGN  shift 95
+	INC  shift 96
+	DEC  shift 97
+	.  error
+
+
+state 85
+	bloc : BGINB . list ENDB  (20)
+
+	TIP  shift 83
+	ID  shift 84
+	PRINT  shift 86
+	.  error
+
+	declaratii  goto 88
+	declaratie  goto 89
+	list  goto 98
+	statement  goto 99
+
+
+state 86
+	statement : PRINT . '(' exp ')' ';'  (28)
+	statement : PRINT . '(' ID ')' ';'  (29)
+
+	'('  shift 100
+	.  error
+
+
+state 87
+	corp : 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc .  (5)
+
+	.  reduce 5
+
+
+state 88
+	declaratii : declaratii . declaratie  (18)
+	statement : declaratii . ';'  (24)
+
+	TIP  shift 83
+	';'  shift 101
+	.  error
+
+	declaratie  goto 102
+
+
+state 89
+	declaratii : declaratie .  (17)
+
+	.  reduce 17
+
+
+state 90
+	bloc : statement .  (21)
+
+	.  reduce 21
+
+
+state 91
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' . bloc  (4)
+
+	TIP  shift 83
+	ID  shift 84
+	BGINB  shift 85
+	PRINT  shift 86
+	.  error
+
+	bloc  goto 103
+	declaratii  goto 88
+	declaratie  goto 89
+	statement  goto 90
+
+
+state 92
+	variab : ID . ASSIGN exp  (13)
+	variab : ID .  (14)
+
+	ASSIGN  shift 104
+	TIP  reduce 14
+	','  reduce 14
+	';'  reduce 14
+
+
+state 93
+	variabile : variab .  (16)
+
+	.  reduce 16
+
+
+state 94
+	variabile : variabile . ',' variab  (15)
+	declaratie : TIP variabile .  (19)
+
+	','  shift 105
+	TIP  reduce 19
+	';'  reduce 19
+
+
+state 95
+	statement : ID ASSIGN . exp ';'  (25)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 106
+
+
+state 96
+	statement : ID INC . ';'  (26)
+
+	';'  shift 107
+	.  error
+
+
+state 97
+	statement : ID DEC . ';'  (27)
+
+	';'  shift 108
+	.  error
+
+
+state 98
+	bloc : BGINB list . ENDB  (20)
+	list : list . statement  (23)
+
+	TIP  shift 83
+	ID  shift 84
+	ENDB  shift 109
+	PRINT  shift 86
+	.  error
+
+	declaratii  goto 88
+	declaratie  goto 89
+	statement  goto 110
+
+
+state 99
+	list : statement .  (22)
+
+	.  reduce 22
+
+
+state 100
+	statement : PRINT '(' . exp ')' ';'  (28)
+	statement : PRINT '(' . ID ')' ';'  (29)
+
+	ID  shift 111
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 112
+
+
+state 101
+	statement : declaratii ';' .  (24)
+
+	.  reduce 24
+
+
+state 102
+	declaratii : declaratii declaratie .  (18)
+
+	.  reduce 18
+
+
+state 103
+	corp : declaratii_globale 'v' 'o' 'i' 'd' 'm' 'a' 'i' 'n' '(' ')' bloc .  (4)
+
+	.  reduce 4
+
+
+state 104
+	variab : ID ASSIGN . exp  (13)
+
+	ID  shift 24
+	INTG  shift 25
+	MINUS  shift 26
+	AVG  shift 27
+	PALINDROM  shift 28
+	OGLINDIT  shift 29
+	CIFRA_CONTROL  shift 30
+	POWER2  shift 31
+	'('  shift 32
+	.  error
+
+	function  goto 33
+	exp  goto 113
+
+
+state 105
+	variabile : variabile ',' . variab  (15)
+
+	ID  shift 92
+	.  error
+
+	variab  goto 114
+
+
+state 106
+	statement : ID ASSIGN exp . ';'  (25)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	';'  shift 115
+	.  error
+
+
+state 107
+	statement : ID INC ';' .  (26)
+
+	.  reduce 26
+
+
+state 108
+	statement : ID DEC ';' .  (27)
+
+	.  reduce 27
+
+
+state 109
+	bloc : BGINB list ENDB .  (20)
+
+	.  reduce 20
+
+
+state 110
+	list : list statement .  (23)
+
+	.  reduce 23
+
+
+state 111
+	statement : PRINT '(' ID . ')' ';'  (29)
+	exp : ID .  (37)
+
+	')'  shift 116
+	'+'  reduce 37
+	'-'  reduce 37
+	'*'  reduce 37
+	'/'  reduce 37
+	'%'  reduce 37
+
+
+state 112
+	statement : PRINT '(' exp . ')' ';'  (28)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	')'  shift 117
+	.  error
+
+
+state 113
+	variab : ID ASSIGN exp .  (13)
+	exp : exp . '+' exp  (32)
+	exp : exp . '-' exp  (33)
+	exp : exp . '*' exp  (34)
+	exp : exp . '/' exp  (35)
+	exp : exp . '%' exp  (36)
+
+	'+'  shift 46
+	'-'  shift 47
+	'*'  shift 48
+	'/'  shift 49
+	'%'  shift 50
+	TIP  reduce 13
+	','  reduce 13
+	';'  reduce 13
+
+
+state 114
+	variabile : variabile ',' variab .  (15)
+
+	.  reduce 15
+
+
+state 115
+	statement : ID ASSIGN exp ';' .  (25)
+
+	.  reduce 25
+
+
+state 116
+	statement : PRINT '(' ID ')' . ';'  (29)
+
+	';'  shift 118
+	.  error
+
+
+state 117
+	statement : PRINT '(' exp ')' . ';'  (28)
+
+	';'  shift 119
+	.  error
+
+
+state 118
+	statement : PRINT '(' ID ')' ';' .  (29)
+
+	.  reduce 29
+
+
+state 119
+	statement : PRINT '(' exp ')' ';' .  (28)
+
+	.  reduce 28
+
+
+37 terminals, 17 nonterminals
+46 grammar rules, 120 states

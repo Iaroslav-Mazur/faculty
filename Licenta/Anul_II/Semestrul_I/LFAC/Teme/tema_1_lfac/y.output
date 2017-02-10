@@ -1,0 +1,2991 @@
+   0  $accept : program $end
+
+   1  program : BGINP librarii corp ENDP
+
+   2  librarii : librarii LIBRARIE
+   3           | LIBRARIE
+
+   4  corp : declaratii clase functions
+   5       | clase functions
+   6       | declaratii functions
+   7       | functions
+
+   8  constr : NUME '(' ')'
+   9         | NUME '(' lista_param ')'
+
+  10  destruct : '~' NUME '(' ')'
+  11           | '~' NUME '(' lista_param ')'
+
+  12  method : function
+  13         | constr ';'
+  14         | destruct ';'
+
+  15  methods : methods method
+  16          | method
+
+  17  TYPE : PRIVATE declaratii methods
+  18       | PRIVATE declaratii
+  19       | PRIVATE methods
+  20       | PUBLIC declaratii methods
+  21       | PUBLIC declaratii
+  22       | PUBLIC methods
+  23       | PROTECTED declaratii methods
+  24       | PROTECTED declaratii
+  25       | PROTECTED methods
+
+  26  TYPES : TYPES TYPE
+  27        | TYPE
+
+  28  clasa : CLASA NUME BGINB TYPES ENDB
+
+  29  clase : clase clasa
+  30        | clasa
+
+  31  variab : asignare
+  32         | CONST asignare
+  33         | ID
+  34         | CONST ID
+  35         | ID DIM_VEC
+  36         | CONST ID DIM_VEC
+
+  37  variabile : variabile ',' variab
+  38            | variab
+
+  39  object : asignare
+  40         | CONST asignare
+  41         | ID
+  42         | ID '(' ')'
+  43         | ID '(' lista_apel ')'
+
+  44  objects : objects ',' object
+  45          | object
+
+  46  declaratii : declaratie ';'
+  47             | declaratii declaratie ';'
+
+  48  declaratie : TIP variabile
+  49             | NUME objects
+
+  50  lista_param : param
+  51              | lista_param ',' param
+
+  52  param : TIP ID
+
+  53  antet_fct : TIP NUME '(' ')'
+  54            | TIP NUME '(' lista_param ')'
+  55            | TIP NUME ':' NUME '(' ')'
+  56            | TIP NUME ':' NUME '(' lista_param ')'
+
+  57  function : antet_fct ';'
+  58           | antet_fct bloc
+
+  59  functions : functions function
+  60            | function
+
+  61  RETURN : exp
+  62         | MINUS exp
+  63         | val_adev
+  64         | CARACTER
+  65         | SIR_CARACTERE
+
+  66  comparatie : ID OPRCOMP ID
+  67             | ID OPRCOMP CARACTER
+  68             | ID OPRCOMP SIR_CARACTERE
+  69             | NR OPRCOMP ID
+  70             | ID OPRCOMP NR
+  71             | NR OPRCOMP NR
+
+  72  adev : adev OPRLOG adev
+  73       | comparatie
+  74       | '(' adev ')'
+  75       | NEG '(' adev ')'
+
+  76  val_adev : adev
+  77           | NEG ID
+
+  78  bloc : BGINB declaratii list ENDB
+  79       | BGINB list ENDB
+  80       | statement
+
+  81  list : statement
+  82       | list statement
+
+  83  NR : RATIONAL
+  84     | INTG
+
+  85  statement : asignare ';'
+  86            | daca
+  87            | apel_fct ';'
+  88            | pentru
+  89            | cat_timp
+  90            | repeta
+  91            | ID INC ';'
+  92            | ID DEC ';'
+  93            | RETURNAT RETURN ';'
+  94            | BREAK ';'
+
+  95  exp : '(' exp ')'
+  96      | exp OPRARM exp
+  97      | ID
+  98      | NR
+  99      | ID '.' ID
+ 100      | ID DIM_VEC
+ 101      | ID '.' apel_fct
+ 102      | apel_fct
+
+ 103  element : ID
+ 104          | ID DIM_VEC
+ 105          |
+
+ 106  asignare : element ASSIGN exp
+ 107           | element ASSIGN MINUS exp
+ 108           | element ASSIGN CARACTER
+ 109           | element ASSIGN SIR_CARACTERE
+
+ 110  conditie : val_adev
+ 111           | ID
+
+ 112  daca : IF '(' conditie ')' bloc
+ 113       | IF '(' conditie ')' bloc ELSE bloc
+
+ 114  param_apel : CONST ID
+ 115             | apel_fct
+ 116             | exp
+
+ 117  lista_apel : param_apel
+ 118             | lista_apel ',' param_apel
+
+ 119  apel_fct : NUME '(' lista_apel ')'
+ 120           | NUME '(' ')'
+
+ 121  pas : ID INC
+ 122      | ID DEC
+ 123      | ID ASSIGN exp
+
+ 124  pentru : FOR '(' asignare ';' conditie ';' pas ')' bloc
+ 125         | FOR '(' asignare ';' ';' pas ')' bloc
+ 126         | FOR '(' ';' conditie ';' pas ')' bloc
+ 127         | FOR '(' asignare ';' conditie ';' ')' bloc
+ 128         | FOR '(' asignare ';' ';' ')' bloc
+ 129         | FOR '(' ';' conditie ';' ')' bloc
+ 130         | FOR '(' ';' ';' pas ')' bloc
+ 131         | FOR '(' ';' ';' ')' bloc
+
+ 132  cat_timp : WHILE '(' conditie ')' bloc
+ 133           | WHILE '(' ')' bloc
+
+ 134  repeta : DO bloc WHILE '(' conditie ')' ';'
+ 135         | DO bloc WHILE '(' ')' ';'
+
+state 0
+	$accept : . program $end  (0)
+
+	BGINP  shift 1
+	.  error
+
+	program  goto 2
+
+
+state 1
+	program : BGINP . librarii corp ENDP  (1)
+
+	LIBRARIE  shift 3
+	.  error
+
+	librarii  goto 4
+
+
+state 2
+	$accept : program . $end  (0)
+
+	$end  accept
+
+
+state 3
+	librarii : LIBRARIE .  (3)
+
+	.  reduce 3
+
+
+state 4
+	program : BGINP librarii . corp ENDP  (1)
+	librarii : librarii . LIBRARIE  (2)
+
+	TIP  shift 5
+	LIBRARIE  shift 6
+	CLASA  shift 7
+	NUME  shift 8
+	.  error
+
+	corp  goto 9
+	declaratii  goto 10
+	clase  goto 11
+	functions  goto 12
+	function  goto 13
+	clasa  goto 14
+	declaratie  goto 15
+	antet_fct  goto 16
+
+
+state 5
+	declaratie : TIP . variabile  (48)
+	antet_fct : TIP . NUME '(' ')'  (53)
+	antet_fct : TIP . NUME '(' lista_param ')'  (54)
+	antet_fct : TIP . NUME ':' NUME '(' ')'  (55)
+	antet_fct : TIP . NUME ':' NUME '(' lista_param ')'  (56)
+	element : .  (105)
+
+	ID  shift 17
+	CONST  shift 18
+	NUME  shift 19
+	ASSIGN  reduce 105
+
+	variab  goto 20
+	asignare  goto 21
+	variabile  goto 22
+	element  goto 23
+
+
+state 6
+	librarii : librarii LIBRARIE .  (2)
+
+	.  reduce 2
+
+
+state 7
+	clasa : CLASA . NUME BGINB TYPES ENDB  (28)
+
+	NUME  shift 24
+	.  error
+
+
+state 8
+	declaratie : NUME . objects  (49)
+	element : .  (105)
+
+	ID  shift 25
+	CONST  shift 26
+	ASSIGN  reduce 105
+
+	asignare  goto 27
+	object  goto 28
+	objects  goto 29
+	element  goto 23
+
+
+state 9
+	program : BGINP librarii corp . ENDP  (1)
+
+	ENDP  shift 30
+	.  error
+
+
+state 10
+	corp : declaratii . clase functions  (4)
+	corp : declaratii . functions  (6)
+	declaratii : declaratii . declaratie ';'  (47)
+
+	TIP  shift 5
+	CLASA  shift 7
+	NUME  shift 8
+	.  error
+
+	clase  goto 31
+	functions  goto 32
+	function  goto 13
+	clasa  goto 14
+	declaratie  goto 33
+	antet_fct  goto 16
+
+
+state 11
+	corp : clase . functions  (5)
+	clase : clase . clasa  (29)
+
+	TIP  shift 34
+	CLASA  shift 7
+	.  error
+
+	functions  goto 35
+	function  goto 13
+	clasa  goto 36
+	antet_fct  goto 16
+
+
+state 12
+	corp : functions .  (7)
+	functions : functions . function  (59)
+
+	TIP  shift 34
+	ENDP  reduce 7
+
+	function  goto 37
+	antet_fct  goto 16
+
+
+state 13
+	functions : function .  (60)
+
+	.  reduce 60
+
+
+state 14
+	clase : clasa .  (30)
+
+	.  reduce 30
+
+
+state 15
+	declaratii : declaratie . ';'  (46)
+
+	';'  shift 38
+	.  error
+
+
+state 16
+	function : antet_fct . ';'  (57)
+	function : antet_fct . bloc  (58)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	';'  shift 48
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 50
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 17
+	variab : ID .  (33)
+	variab : ID . DIM_VEC  (35)
+	element : ID .  (103)
+	element : ID . DIM_VEC  (104)
+
+	DIM_VEC  shift 57
+	ASSIGN  reduce 103
+	';'  reduce 33
+	','  reduce 33
+
+
+state 18
+	variab : CONST . asignare  (32)
+	variab : CONST . ID  (34)
+	variab : CONST . ID DIM_VEC  (36)
+	element : .  (105)
+
+	ID  shift 58
+	ASSIGN  reduce 105
+
+	asignare  goto 59
+	element  goto 23
+
+
+state 19
+	antet_fct : TIP NUME . '(' ')'  (53)
+	antet_fct : TIP NUME . '(' lista_param ')'  (54)
+	antet_fct : TIP NUME . ':' NUME '(' ')'  (55)
+	antet_fct : TIP NUME . ':' NUME '(' lista_param ')'  (56)
+
+	'('  shift 60
+	':'  shift 61
+	.  error
+
+
+state 20
+	variabile : variab .  (38)
+
+	.  reduce 38
+
+
+state 21
+	variab : asignare .  (31)
+
+	.  reduce 31
+
+
+state 22
+	variabile : variabile . ',' variab  (37)
+	declaratie : TIP variabile .  (48)
+
+	','  shift 62
+	';'  reduce 48
+
+
+state 23
+	asignare : element . ASSIGN exp  (106)
+	asignare : element . ASSIGN MINUS exp  (107)
+	asignare : element . ASSIGN CARACTER  (108)
+	asignare : element . ASSIGN SIR_CARACTERE  (109)
+
+	ASSIGN  shift 63
+	.  error
+
+
+state 24
+	clasa : CLASA NUME . BGINB TYPES ENDB  (28)
+
+	BGINB  shift 64
+	.  error
+
+
+state 25
+	object : ID .  (41)
+	object : ID . '(' ')'  (42)
+	object : ID . '(' lista_apel ')'  (43)
+	element : ID .  (103)
+	element : ID . DIM_VEC  (104)
+
+	DIM_VEC  shift 65
+	'('  shift 66
+	ASSIGN  reduce 103
+	';'  reduce 41
+	','  reduce 41
+
+
+state 26
+	object : CONST . asignare  (40)
+	element : .  (105)
+
+	ID  shift 67
+	ASSIGN  reduce 105
+
+	asignare  goto 68
+	element  goto 23
+
+
+state 27
+	object : asignare .  (39)
+
+	.  reduce 39
+
+
+state 28
+	objects : object .  (45)
+
+	.  reduce 45
+
+
+state 29
+	objects : objects . ',' object  (44)
+	declaratie : NUME objects .  (49)
+
+	','  shift 69
+	';'  reduce 49
+
+
+state 30
+	program : BGINP librarii corp ENDP .  (1)
+
+	.  reduce 1
+
+
+state 31
+	corp : declaratii clase . functions  (4)
+	clase : clase . clasa  (29)
+
+	TIP  shift 34
+	CLASA  shift 7
+	.  error
+
+	functions  goto 70
+	function  goto 13
+	clasa  goto 36
+	antet_fct  goto 16
+
+
+state 32
+	corp : declaratii functions .  (6)
+	functions : functions . function  (59)
+
+	TIP  shift 34
+	ENDP  reduce 6
+
+	function  goto 37
+	antet_fct  goto 16
+
+
+state 33
+	declaratii : declaratii declaratie . ';'  (47)
+
+	';'  shift 71
+	.  error
+
+
+state 34
+	antet_fct : TIP . NUME '(' ')'  (53)
+	antet_fct : TIP . NUME '(' lista_param ')'  (54)
+	antet_fct : TIP . NUME ':' NUME '(' ')'  (55)
+	antet_fct : TIP . NUME ':' NUME '(' lista_param ')'  (56)
+
+	NUME  shift 19
+	.  error
+
+
+state 35
+	corp : clase functions .  (5)
+	functions : functions . function  (59)
+
+	TIP  shift 34
+	ENDP  reduce 5
+
+	function  goto 37
+	antet_fct  goto 16
+
+
+state 36
+	clase : clase clasa .  (29)
+
+	.  reduce 29
+
+
+state 37
+	functions : functions function .  (59)
+
+	.  reduce 59
+
+
+state 38
+	declaratii : declaratie ';' .  (46)
+
+	.  reduce 46
+
+
+state 39
+	statement : ID . INC ';'  (91)
+	statement : ID . DEC ';'  (92)
+	element : ID .  (103)
+	element : ID . DIM_VEC  (104)
+
+	INC  shift 72
+	DEC  shift 73
+	DIM_VEC  shift 65
+	ASSIGN  reduce 103
+
+
+state 40
+	cat_timp : WHILE . '(' conditie ')' bloc  (132)
+	cat_timp : WHILE . '(' ')' bloc  (133)
+
+	'('  shift 74
+	.  error
+
+
+state 41
+	pentru : FOR . '(' asignare ';' conditie ';' pas ')' bloc  (124)
+	pentru : FOR . '(' asignare ';' ';' pas ')' bloc  (125)
+	pentru : FOR . '(' ';' conditie ';' pas ')' bloc  (126)
+	pentru : FOR . '(' asignare ';' conditie ';' ')' bloc  (127)
+	pentru : FOR . '(' asignare ';' ';' ')' bloc  (128)
+	pentru : FOR . '(' ';' conditie ';' ')' bloc  (129)
+	pentru : FOR . '(' ';' ';' pas ')' bloc  (130)
+	pentru : FOR . '(' ';' ';' ')' bloc  (131)
+
+	'('  shift 75
+	.  error
+
+
+state 42
+	daca : IF . '(' conditie ')' bloc  (112)
+	daca : IF . '(' conditie ')' bloc ELSE bloc  (113)
+
+	'('  shift 76
+	.  error
+
+
+state 43
+	bloc : BGINB . declaratii list ENDB  (78)
+	bloc : BGINB . list ENDB  (79)
+	element : .  (105)
+
+	TIP  shift 77
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	RETURNAT  shift 44
+	NUME  shift 78
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	declaratii  goto 79
+	asignare  goto 49
+	declaratie  goto 15
+	list  goto 80
+	statement  goto 81
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 44
+	statement : RETURNAT . RETURN ';'  (93)
+
+	ID  shift 82
+	CARACTER  shift 83
+	SIR_CARACTERE  shift 84
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	NUME  shift 45
+	MINUS  shift 88
+	'('  shift 89
+	.  error
+
+	RETURN  goto 90
+	exp  goto 91
+	val_adev  goto 92
+	comparatie  goto 93
+	NR  goto 94
+	adev  goto 95
+	apel_fct  goto 96
+
+
+state 45
+	apel_fct : NUME . '(' lista_apel ')'  (119)
+	apel_fct : NUME . '(' ')'  (120)
+
+	'('  shift 97
+	.  error
+
+
+state 46
+	repeta : DO . bloc WHILE '(' conditie ')' ';'  (134)
+	repeta : DO . bloc WHILE '(' ')' ';'  (135)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 98
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 47
+	statement : BREAK . ';'  (94)
+
+	';'  shift 99
+	.  error
+
+
+state 48
+	function : antet_fct ';' .  (57)
+
+	.  reduce 57
+
+
+state 49
+	statement : asignare . ';'  (85)
+
+	';'  shift 100
+	.  error
+
+
+state 50
+	function : antet_fct bloc .  (58)
+
+	.  reduce 58
+
+
+state 51
+	bloc : statement .  (80)
+
+	.  reduce 80
+
+
+state 52
+	statement : daca .  (86)
+
+	.  reduce 86
+
+
+state 53
+	statement : apel_fct . ';'  (87)
+
+	';'  shift 101
+	.  error
+
+
+state 54
+	statement : pentru .  (88)
+
+	.  reduce 88
+
+
+state 55
+	statement : cat_timp .  (89)
+
+	.  reduce 89
+
+
+state 56
+	statement : repeta .  (90)
+
+	.  reduce 90
+
+
+state 57
+	variab : ID DIM_VEC .  (35)
+	element : ID DIM_VEC .  (104)
+
+	ASSIGN  reduce 104
+	';'  reduce 35
+	','  reduce 35
+
+
+state 58
+	variab : CONST ID .  (34)
+	variab : CONST ID . DIM_VEC  (36)
+	element : ID .  (103)
+	element : ID . DIM_VEC  (104)
+
+	DIM_VEC  shift 102
+	ASSIGN  reduce 103
+	';'  reduce 34
+	','  reduce 34
+
+
+state 59
+	variab : CONST asignare .  (32)
+
+	.  reduce 32
+
+
+state 60
+	antet_fct : TIP NUME '(' . ')'  (53)
+	antet_fct : TIP NUME '(' . lista_param ')'  (54)
+
+	TIP  shift 103
+	')'  shift 104
+	.  error
+
+	lista_param  goto 105
+	param  goto 106
+
+
+state 61
+	antet_fct : TIP NUME ':' . NUME '(' ')'  (55)
+	antet_fct : TIP NUME ':' . NUME '(' lista_param ')'  (56)
+
+	NUME  shift 107
+	.  error
+
+
+state 62
+	variabile : variabile ',' . variab  (37)
+	element : .  (105)
+
+	ID  shift 17
+	CONST  shift 18
+	ASSIGN  reduce 105
+
+	variab  goto 108
+	asignare  goto 21
+	element  goto 23
+
+
+state 63
+	asignare : element ASSIGN . exp  (106)
+	asignare : element ASSIGN . MINUS exp  (107)
+	asignare : element ASSIGN . CARACTER  (108)
+	asignare : element ASSIGN . SIR_CARACTERE  (109)
+
+	ID  shift 109
+	CARACTER  shift 110
+	SIR_CARACTERE  shift 111
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	MINUS  shift 112
+	'('  shift 113
+	.  error
+
+	exp  goto 114
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 64
+	clasa : CLASA NUME BGINB . TYPES ENDB  (28)
+
+	PRIVATE  shift 116
+	PUBLIC  shift 117
+	PROTECTED  shift 118
+	.  error
+
+	TYPE  goto 119
+	TYPES  goto 120
+
+
+state 65
+	element : ID DIM_VEC .  (104)
+
+	.  reduce 104
+
+
+state 66
+	object : ID '(' . ')'  (42)
+	object : ID '(' . lista_apel ')'  (43)
+
+	ID  shift 109
+	CONST  shift 121
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	')'  shift 122
+	.  error
+
+	lista_apel  goto 123
+	exp  goto 124
+	NR  goto 115
+	apel_fct  goto 125
+	param_apel  goto 126
+
+
+state 67
+	element : ID .  (103)
+	element : ID . DIM_VEC  (104)
+
+	DIM_VEC  shift 65
+	ASSIGN  reduce 103
+
+
+state 68
+	object : CONST asignare .  (40)
+
+	.  reduce 40
+
+
+state 69
+	objects : objects ',' . object  (44)
+	element : .  (105)
+
+	ID  shift 25
+	CONST  shift 26
+	ASSIGN  reduce 105
+
+	asignare  goto 27
+	object  goto 127
+	element  goto 23
+
+
+state 70
+	corp : declaratii clase functions .  (4)
+	functions : functions . function  (59)
+
+	TIP  shift 34
+	ENDP  reduce 4
+
+	function  goto 37
+	antet_fct  goto 16
+
+
+state 71
+	declaratii : declaratii declaratie ';' .  (47)
+
+	.  reduce 47
+
+
+state 72
+	statement : ID INC . ';'  (91)
+
+	';'  shift 128
+	.  error
+
+
+state 73
+	statement : ID DEC . ';'  (92)
+
+	';'  shift 129
+	.  error
+
+
+state 74
+	cat_timp : WHILE '(' . conditie ')' bloc  (132)
+	cat_timp : WHILE '(' . ')' bloc  (133)
+
+	ID  shift 130
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	'('  shift 131
+	')'  shift 132
+	.  error
+
+	val_adev  goto 133
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 95
+	conditie  goto 135
+
+
+state 75
+	pentru : FOR '(' . asignare ';' conditie ';' pas ')' bloc  (124)
+	pentru : FOR '(' . asignare ';' ';' pas ')' bloc  (125)
+	pentru : FOR '(' . ';' conditie ';' pas ')' bloc  (126)
+	pentru : FOR '(' . asignare ';' conditie ';' ')' bloc  (127)
+	pentru : FOR '(' . asignare ';' ';' ')' bloc  (128)
+	pentru : FOR '(' . ';' conditie ';' ')' bloc  (129)
+	pentru : FOR '(' . ';' ';' pas ')' bloc  (130)
+	pentru : FOR '(' . ';' ';' ')' bloc  (131)
+	element : .  (105)
+
+	ID  shift 67
+	';'  shift 136
+	ASSIGN  reduce 105
+
+	asignare  goto 137
+	element  goto 23
+
+
+state 76
+	daca : IF '(' . conditie ')' bloc  (112)
+	daca : IF '(' . conditie ')' bloc ELSE bloc  (113)
+
+	ID  shift 130
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	'('  shift 131
+	.  error
+
+	val_adev  goto 133
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 95
+	conditie  goto 138
+
+
+state 77
+	declaratie : TIP . variabile  (48)
+	element : .  (105)
+
+	ID  shift 17
+	CONST  shift 18
+	ASSIGN  reduce 105
+
+	variab  goto 20
+	asignare  goto 21
+	variabile  goto 22
+	element  goto 23
+
+
+state 78
+	declaratie : NUME . objects  (49)
+	apel_fct : NUME . '(' lista_apel ')'  (119)
+	apel_fct : NUME . '(' ')'  (120)
+	element : .  (105)
+
+	ID  shift 25
+	CONST  shift 26
+	'('  shift 97
+	ASSIGN  reduce 105
+
+	asignare  goto 27
+	object  goto 28
+	objects  goto 29
+	element  goto 23
+
+
+state 79
+	declaratii : declaratii . declaratie ';'  (47)
+	bloc : BGINB declaratii . list ENDB  (78)
+	element : .  (105)
+
+	TIP  shift 77
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	RETURNAT  shift 44
+	NUME  shift 78
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	declaratie  goto 33
+	list  goto 139
+	statement  goto 81
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 80
+	bloc : BGINB list . ENDB  (79)
+	list : list . statement  (82)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	ENDB  shift 140
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	statement  goto 141
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 81
+	list : statement .  (81)
+
+	.  reduce 81
+
+
+state 82
+	comparatie : ID . OPRCOMP ID  (66)
+	comparatie : ID . OPRCOMP CARACTER  (67)
+	comparatie : ID . OPRCOMP SIR_CARACTERE  (68)
+	comparatie : ID . OPRCOMP NR  (70)
+	exp : ID .  (97)
+	exp : ID . '.' ID  (99)
+	exp : ID . DIM_VEC  (100)
+	exp : ID . '.' apel_fct  (101)
+
+	OPRCOMP  shift 142
+	DIM_VEC  shift 143
+	'.'  shift 144
+	OPRARM  reduce 97
+	')'  reduce 97
+	';'  reduce 97
+
+
+state 83
+	RETURN : CARACTER .  (64)
+
+	.  reduce 64
+
+
+state 84
+	RETURN : SIR_CARACTERE .  (65)
+
+	.  reduce 65
+
+
+state 85
+	NR : INTG .  (84)
+
+	.  reduce 84
+
+
+state 86
+	NR : RATIONAL .  (83)
+
+	.  reduce 83
+
+
+state 87
+	adev : NEG . '(' adev ')'  (75)
+	val_adev : NEG . ID  (77)
+
+	ID  shift 145
+	'('  shift 146
+	.  error
+
+
+state 88
+	RETURN : MINUS . exp  (62)
+
+	ID  shift 109
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 147
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 89
+	adev : '(' . adev ')'  (74)
+	exp : '(' . exp ')'  (95)
+
+	ID  shift 82
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 148
+	NUME  shift 45
+	'('  shift 89
+	.  error
+
+	exp  goto 149
+	comparatie  goto 93
+	NR  goto 94
+	adev  goto 150
+	apel_fct  goto 96
+
+
+state 90
+	statement : RETURNAT RETURN . ';'  (93)
+
+	';'  shift 151
+	.  error
+
+
+state 91
+	RETURN : exp .  (61)
+	exp : exp . OPRARM exp  (96)
+
+	OPRARM  shift 152
+	';'  reduce 61
+
+
+state 92
+	RETURN : val_adev .  (63)
+
+	.  reduce 63
+
+
+state 93
+	adev : comparatie .  (73)
+
+	.  reduce 73
+
+
+state 94
+	comparatie : NR . OPRCOMP ID  (69)
+	comparatie : NR . OPRCOMP NR  (71)
+	exp : NR .  (98)
+
+	OPRCOMP  shift 153
+	OPRARM  reduce 98
+	')'  reduce 98
+	';'  reduce 98
+
+
+state 95
+	adev : adev . OPRLOG adev  (72)
+	val_adev : adev .  (76)
+
+	OPRLOG  shift 154
+	')'  reduce 76
+	';'  reduce 76
+
+
+state 96
+	exp : apel_fct .  (102)
+
+	.  reduce 102
+
+
+state 97
+	apel_fct : NUME '(' . lista_apel ')'  (119)
+	apel_fct : NUME '(' . ')'  (120)
+
+	ID  shift 109
+	CONST  shift 121
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	')'  shift 155
+	.  error
+
+	lista_apel  goto 156
+	exp  goto 124
+	NR  goto 115
+	apel_fct  goto 125
+	param_apel  goto 126
+
+
+state 98
+	repeta : DO bloc . WHILE '(' conditie ')' ';'  (134)
+	repeta : DO bloc . WHILE '(' ')' ';'  (135)
+
+	WHILE  shift 157
+	.  error
+
+
+state 99
+	statement : BREAK ';' .  (94)
+
+	.  reduce 94
+
+
+state 100
+	statement : asignare ';' .  (85)
+
+	.  reduce 85
+
+
+state 101
+	statement : apel_fct ';' .  (87)
+
+	.  reduce 87
+
+
+state 102
+	variab : CONST ID DIM_VEC .  (36)
+	element : ID DIM_VEC .  (104)
+
+	ASSIGN  reduce 104
+	';'  reduce 36
+	','  reduce 36
+
+
+state 103
+	param : TIP . ID  (52)
+
+	ID  shift 158
+	.  error
+
+
+state 104
+	antet_fct : TIP NUME '(' ')' .  (53)
+
+	.  reduce 53
+
+
+state 105
+	lista_param : lista_param . ',' param  (51)
+	antet_fct : TIP NUME '(' lista_param . ')'  (54)
+
+	')'  shift 159
+	','  shift 160
+	.  error
+
+
+state 106
+	lista_param : param .  (50)
+
+	.  reduce 50
+
+
+state 107
+	antet_fct : TIP NUME ':' NUME . '(' ')'  (55)
+	antet_fct : TIP NUME ':' NUME . '(' lista_param ')'  (56)
+
+	'('  shift 161
+	.  error
+
+
+state 108
+	variabile : variabile ',' variab .  (37)
+
+	.  reduce 37
+
+
+state 109
+	exp : ID .  (97)
+	exp : ID . '.' ID  (99)
+	exp : ID . DIM_VEC  (100)
+	exp : ID . '.' apel_fct  (101)
+
+	DIM_VEC  shift 143
+	'.'  shift 144
+	OPRARM  reduce 97
+	')'  reduce 97
+	';'  reduce 97
+	','  reduce 97
+
+
+state 110
+	asignare : element ASSIGN CARACTER .  (108)
+
+	.  reduce 108
+
+
+state 111
+	asignare : element ASSIGN SIR_CARACTERE .  (109)
+
+	.  reduce 109
+
+
+state 112
+	asignare : element ASSIGN MINUS . exp  (107)
+
+	ID  shift 109
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 162
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 113
+	exp : '(' . exp ')'  (95)
+
+	ID  shift 109
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 149
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 114
+	exp : exp . OPRARM exp  (96)
+	asignare : element ASSIGN exp .  (106)
+
+	OPRARM  shift 152
+	';'  reduce 106
+	','  reduce 106
+
+
+state 115
+	exp : NR .  (98)
+
+	.  reduce 98
+
+
+state 116
+	TYPE : PRIVATE . declaratii methods  (17)
+	TYPE : PRIVATE . declaratii  (18)
+	TYPE : PRIVATE . methods  (19)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	.  error
+
+	declaratii  goto 165
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 170
+	declaratie  goto 15
+	antet_fct  goto 16
+
+
+state 117
+	TYPE : PUBLIC . declaratii methods  (20)
+	TYPE : PUBLIC . declaratii  (21)
+	TYPE : PUBLIC . methods  (22)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	.  error
+
+	declaratii  goto 171
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 172
+	declaratie  goto 15
+	antet_fct  goto 16
+
+
+state 118
+	TYPE : PROTECTED . declaratii methods  (23)
+	TYPE : PROTECTED . declaratii  (24)
+	TYPE : PROTECTED . methods  (25)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	.  error
+
+	declaratii  goto 173
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 174
+	declaratie  goto 15
+	antet_fct  goto 16
+
+
+state 119
+	TYPES : TYPE .  (27)
+
+	.  reduce 27
+
+
+state 120
+	TYPES : TYPES . TYPE  (26)
+	clasa : CLASA NUME BGINB TYPES . ENDB  (28)
+
+	ENDB  shift 175
+	PRIVATE  shift 116
+	PUBLIC  shift 117
+	PROTECTED  shift 118
+	.  error
+
+	TYPE  goto 176
+
+
+state 121
+	param_apel : CONST . ID  (114)
+
+	ID  shift 177
+	.  error
+
+
+state 122
+	object : ID '(' ')' .  (42)
+
+	.  reduce 42
+
+
+state 123
+	object : ID '(' lista_apel . ')'  (43)
+	lista_apel : lista_apel . ',' param_apel  (118)
+
+	')'  shift 178
+	','  shift 179
+	.  error
+
+
+state 124
+	exp : exp . OPRARM exp  (96)
+	param_apel : exp .  (116)
+
+	OPRARM  shift 152
+	')'  reduce 116
+	','  reduce 116
+
+
+125: reduce/reduce conflict (reduce 102, reduce 115) on ')'
+125: reduce/reduce conflict (reduce 102, reduce 115) on ','
+state 125
+	exp : apel_fct .  (102)
+	param_apel : apel_fct .  (115)
+
+	.  reduce 102
+
+
+state 126
+	lista_apel : param_apel .  (117)
+
+	.  reduce 117
+
+
+state 127
+	objects : objects ',' object .  (44)
+
+	.  reduce 44
+
+
+state 128
+	statement : ID INC ';' .  (91)
+
+	.  reduce 91
+
+
+state 129
+	statement : ID DEC ';' .  (92)
+
+	.  reduce 92
+
+
+state 130
+	comparatie : ID . OPRCOMP ID  (66)
+	comparatie : ID . OPRCOMP CARACTER  (67)
+	comparatie : ID . OPRCOMP SIR_CARACTERE  (68)
+	comparatie : ID . OPRCOMP NR  (70)
+	conditie : ID .  (111)
+
+	OPRCOMP  shift 142
+	')'  reduce 111
+	';'  reduce 111
+
+
+state 131
+	adev : '(' . adev ')'  (74)
+
+	ID  shift 180
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 148
+	'('  shift 131
+	.  error
+
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 150
+
+
+state 132
+	cat_timp : WHILE '(' ')' . bloc  (133)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 181
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 133
+	conditie : val_adev .  (110)
+
+	.  reduce 110
+
+
+state 134
+	comparatie : NR . OPRCOMP ID  (69)
+	comparatie : NR . OPRCOMP NR  (71)
+
+	OPRCOMP  shift 153
+	.  error
+
+
+state 135
+	cat_timp : WHILE '(' conditie . ')' bloc  (132)
+
+	')'  shift 182
+	.  error
+
+
+state 136
+	pentru : FOR '(' ';' . conditie ';' pas ')' bloc  (126)
+	pentru : FOR '(' ';' . conditie ';' ')' bloc  (129)
+	pentru : FOR '(' ';' . ';' pas ')' bloc  (130)
+	pentru : FOR '(' ';' . ';' ')' bloc  (131)
+
+	ID  shift 130
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	'('  shift 131
+	';'  shift 183
+	.  error
+
+	val_adev  goto 133
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 95
+	conditie  goto 184
+
+
+state 137
+	pentru : FOR '(' asignare . ';' conditie ';' pas ')' bloc  (124)
+	pentru : FOR '(' asignare . ';' ';' pas ')' bloc  (125)
+	pentru : FOR '(' asignare . ';' conditie ';' ')' bloc  (127)
+	pentru : FOR '(' asignare . ';' ';' ')' bloc  (128)
+
+	';'  shift 185
+	.  error
+
+
+state 138
+	daca : IF '(' conditie . ')' bloc  (112)
+	daca : IF '(' conditie . ')' bloc ELSE bloc  (113)
+
+	')'  shift 186
+	.  error
+
+
+state 139
+	bloc : BGINB declaratii list . ENDB  (78)
+	list : list . statement  (82)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	ENDB  shift 187
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	statement  goto 141
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 140
+	bloc : BGINB list ENDB .  (79)
+
+	.  reduce 79
+
+
+state 141
+	list : list statement .  (82)
+
+	.  reduce 82
+
+
+state 142
+	comparatie : ID OPRCOMP . ID  (66)
+	comparatie : ID OPRCOMP . CARACTER  (67)
+	comparatie : ID OPRCOMP . SIR_CARACTERE  (68)
+	comparatie : ID OPRCOMP . NR  (70)
+
+	ID  shift 188
+	CARACTER  shift 189
+	SIR_CARACTERE  shift 190
+	INTG  shift 85
+	RATIONAL  shift 86
+	.  error
+
+	NR  goto 191
+
+
+state 143
+	exp : ID DIM_VEC .  (100)
+
+	.  reduce 100
+
+
+state 144
+	exp : ID '.' . ID  (99)
+	exp : ID '.' . apel_fct  (101)
+
+	ID  shift 192
+	NUME  shift 45
+	.  error
+
+	apel_fct  goto 193
+
+
+state 145
+	val_adev : NEG ID .  (77)
+
+	.  reduce 77
+
+
+state 146
+	adev : NEG '(' . adev ')'  (75)
+
+	ID  shift 180
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 148
+	'('  shift 131
+	.  error
+
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 194
+
+
+state 147
+	RETURN : MINUS exp .  (62)
+	exp : exp . OPRARM exp  (96)
+
+	OPRARM  shift 152
+	';'  reduce 62
+
+
+state 148
+	adev : NEG . '(' adev ')'  (75)
+
+	'('  shift 146
+	.  error
+
+
+state 149
+	exp : '(' exp . ')'  (95)
+	exp : exp . OPRARM exp  (96)
+
+	OPRARM  shift 152
+	')'  shift 195
+	.  error
+
+
+state 150
+	adev : adev . OPRLOG adev  (72)
+	adev : '(' adev . ')'  (74)
+
+	OPRLOG  shift 154
+	')'  shift 196
+	.  error
+
+
+state 151
+	statement : RETURNAT RETURN ';' .  (93)
+
+	.  reduce 93
+
+
+state 152
+	exp : exp OPRARM . exp  (96)
+
+	ID  shift 109
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 197
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 153
+	comparatie : NR OPRCOMP . ID  (69)
+	comparatie : NR OPRCOMP . NR  (71)
+
+	ID  shift 198
+	INTG  shift 85
+	RATIONAL  shift 86
+	.  error
+
+	NR  goto 199
+
+
+state 154
+	adev : adev OPRLOG . adev  (72)
+
+	ID  shift 180
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 148
+	'('  shift 131
+	.  error
+
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 200
+
+
+state 155
+	apel_fct : NUME '(' ')' .  (120)
+
+	.  reduce 120
+
+
+state 156
+	lista_apel : lista_apel . ',' param_apel  (118)
+	apel_fct : NUME '(' lista_apel . ')'  (119)
+
+	')'  shift 201
+	','  shift 179
+	.  error
+
+
+state 157
+	repeta : DO bloc WHILE . '(' conditie ')' ';'  (134)
+	repeta : DO bloc WHILE . '(' ')' ';'  (135)
+
+	'('  shift 202
+	.  error
+
+
+state 158
+	param : TIP ID .  (52)
+
+	.  reduce 52
+
+
+state 159
+	antet_fct : TIP NUME '(' lista_param ')' .  (54)
+
+	.  reduce 54
+
+
+state 160
+	lista_param : lista_param ',' . param  (51)
+
+	TIP  shift 103
+	.  error
+
+	param  goto 203
+
+
+state 161
+	antet_fct : TIP NUME ':' NUME '(' . ')'  (55)
+	antet_fct : TIP NUME ':' NUME '(' . lista_param ')'  (56)
+
+	TIP  shift 103
+	')'  shift 204
+	.  error
+
+	lista_param  goto 205
+	param  goto 106
+
+
+state 162
+	exp : exp . OPRARM exp  (96)
+	asignare : element ASSIGN MINUS exp .  (107)
+
+	OPRARM  shift 152
+	';'  reduce 107
+	','  reduce 107
+
+
+state 163
+	constr : NUME . '(' ')'  (8)
+	constr : NUME . '(' lista_param ')'  (9)
+	declaratie : NUME . objects  (49)
+	element : .  (105)
+
+	ID  shift 25
+	CONST  shift 26
+	'('  shift 206
+	ASSIGN  reduce 105
+
+	asignare  goto 27
+	object  goto 28
+	objects  goto 29
+	element  goto 23
+
+
+state 164
+	destruct : '~' . NUME '(' ')'  (10)
+	destruct : '~' . NUME '(' lista_param ')'  (11)
+
+	NUME  shift 207
+	.  error
+
+
+state 165
+	TYPE : PRIVATE declaratii . methods  (17)
+	TYPE : PRIVATE declaratii .  (18)
+	declaratii : declaratii . declaratie ';'  (47)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	ENDB  reduce 18
+	PRIVATE  reduce 18
+	PUBLIC  reduce 18
+	PROTECTED  reduce 18
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 208
+	declaratie  goto 33
+	antet_fct  goto 16
+
+
+state 166
+	method : constr . ';'  (13)
+
+	';'  shift 209
+	.  error
+
+
+state 167
+	method : destruct . ';'  (14)
+
+	';'  shift 210
+	.  error
+
+
+state 168
+	methods : method .  (16)
+
+	.  reduce 16
+
+
+state 169
+	method : function .  (12)
+
+	.  reduce 12
+
+
+state 170
+	methods : methods . method  (15)
+	TYPE : PRIVATE methods .  (19)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 19
+	PRIVATE  reduce 19
+	PUBLIC  reduce 19
+	PROTECTED  reduce 19
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 171
+	TYPE : PUBLIC declaratii . methods  (20)
+	TYPE : PUBLIC declaratii .  (21)
+	declaratii : declaratii . declaratie ';'  (47)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	ENDB  reduce 21
+	PRIVATE  reduce 21
+	PUBLIC  reduce 21
+	PROTECTED  reduce 21
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 213
+	declaratie  goto 33
+	antet_fct  goto 16
+
+
+state 172
+	methods : methods . method  (15)
+	TYPE : PUBLIC methods .  (22)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 22
+	PRIVATE  reduce 22
+	PUBLIC  reduce 22
+	PROTECTED  reduce 22
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 173
+	TYPE : PROTECTED declaratii . methods  (23)
+	TYPE : PROTECTED declaratii .  (24)
+	declaratii : declaratii . declaratie ';'  (47)
+
+	TIP  shift 5
+	NUME  shift 163
+	'~'  shift 164
+	ENDB  reduce 24
+	PRIVATE  reduce 24
+	PUBLIC  reduce 24
+	PROTECTED  reduce 24
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 168
+	function  goto 169
+	methods  goto 214
+	declaratie  goto 33
+	antet_fct  goto 16
+
+
+state 174
+	methods : methods . method  (15)
+	TYPE : PROTECTED methods .  (25)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 25
+	PRIVATE  reduce 25
+	PUBLIC  reduce 25
+	PROTECTED  reduce 25
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 175
+	clasa : CLASA NUME BGINB TYPES ENDB .  (28)
+
+	.  reduce 28
+
+
+state 176
+	TYPES : TYPES TYPE .  (26)
+
+	.  reduce 26
+
+
+state 177
+	param_apel : CONST ID .  (114)
+
+	.  reduce 114
+
+
+state 178
+	object : ID '(' lista_apel ')' .  (43)
+
+	.  reduce 43
+
+
+state 179
+	lista_apel : lista_apel ',' . param_apel  (118)
+
+	ID  shift 109
+	CONST  shift 121
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 124
+	NR  goto 115
+	apel_fct  goto 125
+	param_apel  goto 215
+
+
+state 180
+	comparatie : ID . OPRCOMP ID  (66)
+	comparatie : ID . OPRCOMP CARACTER  (67)
+	comparatie : ID . OPRCOMP SIR_CARACTERE  (68)
+	comparatie : ID . OPRCOMP NR  (70)
+
+	OPRCOMP  shift 142
+	.  error
+
+
+state 181
+	cat_timp : WHILE '(' ')' bloc .  (133)
+
+	.  reduce 133
+
+
+state 182
+	cat_timp : WHILE '(' conditie ')' . bloc  (132)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 216
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 183
+	pentru : FOR '(' ';' ';' . pas ')' bloc  (130)
+	pentru : FOR '(' ';' ';' . ')' bloc  (131)
+
+	ID  shift 217
+	')'  shift 218
+	.  error
+
+	pas  goto 219
+
+
+state 184
+	pentru : FOR '(' ';' conditie . ';' pas ')' bloc  (126)
+	pentru : FOR '(' ';' conditie . ';' ')' bloc  (129)
+
+	';'  shift 220
+	.  error
+
+
+state 185
+	pentru : FOR '(' asignare ';' . conditie ';' pas ')' bloc  (124)
+	pentru : FOR '(' asignare ';' . ';' pas ')' bloc  (125)
+	pentru : FOR '(' asignare ';' . conditie ';' ')' bloc  (127)
+	pentru : FOR '(' asignare ';' . ';' ')' bloc  (128)
+
+	ID  shift 130
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	'('  shift 131
+	';'  shift 221
+	.  error
+
+	val_adev  goto 133
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 95
+	conditie  goto 222
+
+
+state 186
+	daca : IF '(' conditie ')' . bloc  (112)
+	daca : IF '(' conditie ')' . bloc ELSE bloc  (113)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 223
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 187
+	bloc : BGINB declaratii list ENDB .  (78)
+
+	.  reduce 78
+
+
+state 188
+	comparatie : ID OPRCOMP ID .  (66)
+
+	.  reduce 66
+
+
+state 189
+	comparatie : ID OPRCOMP CARACTER .  (67)
+
+	.  reduce 67
+
+
+state 190
+	comparatie : ID OPRCOMP SIR_CARACTERE .  (68)
+
+	.  reduce 68
+
+
+state 191
+	comparatie : ID OPRCOMP NR .  (70)
+
+	.  reduce 70
+
+
+state 192
+	exp : ID '.' ID .  (99)
+
+	.  reduce 99
+
+
+state 193
+	exp : ID '.' apel_fct .  (101)
+
+	.  reduce 101
+
+
+state 194
+	adev : adev . OPRLOG adev  (72)
+	adev : NEG '(' adev . ')'  (75)
+
+	OPRLOG  shift 154
+	')'  shift 224
+	.  error
+
+
+state 195
+	exp : '(' exp ')' .  (95)
+
+	.  reduce 95
+
+
+state 196
+	adev : '(' adev ')' .  (74)
+
+	.  reduce 74
+
+
+state 197
+	exp : exp . OPRARM exp  (96)
+	exp : exp OPRARM exp .  (96)
+
+	.  reduce 96
+
+
+state 198
+	comparatie : NR OPRCOMP ID .  (69)
+
+	.  reduce 69
+
+
+state 199
+	comparatie : NR OPRCOMP NR .  (71)
+
+	.  reduce 71
+
+
+state 200
+	adev : adev . OPRLOG adev  (72)
+	adev : adev OPRLOG adev .  (72)
+
+	.  reduce 72
+
+
+state 201
+	apel_fct : NUME '(' lista_apel ')' .  (119)
+
+	.  reduce 119
+
+
+state 202
+	repeta : DO bloc WHILE '(' . conditie ')' ';'  (134)
+	repeta : DO bloc WHILE '(' . ')' ';'  (135)
+
+	ID  shift 130
+	INTG  shift 85
+	RATIONAL  shift 86
+	NEG  shift 87
+	'('  shift 131
+	')'  shift 225
+	.  error
+
+	val_adev  goto 133
+	comparatie  goto 93
+	NR  goto 134
+	adev  goto 95
+	conditie  goto 226
+
+
+state 203
+	lista_param : lista_param ',' param .  (51)
+
+	.  reduce 51
+
+
+state 204
+	antet_fct : TIP NUME ':' NUME '(' ')' .  (55)
+
+	.  reduce 55
+
+
+state 205
+	lista_param : lista_param . ',' param  (51)
+	antet_fct : TIP NUME ':' NUME '(' lista_param . ')'  (56)
+
+	')'  shift 227
+	','  shift 160
+	.  error
+
+
+state 206
+	constr : NUME '(' . ')'  (8)
+	constr : NUME '(' . lista_param ')'  (9)
+
+	TIP  shift 103
+	')'  shift 228
+	.  error
+
+	lista_param  goto 229
+	param  goto 106
+
+
+state 207
+	destruct : '~' NUME . '(' ')'  (10)
+	destruct : '~' NUME . '(' lista_param ')'  (11)
+
+	'('  shift 230
+	.  error
+
+
+state 208
+	methods : methods . method  (15)
+	TYPE : PRIVATE declaratii methods .  (17)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 17
+	PRIVATE  reduce 17
+	PUBLIC  reduce 17
+	PROTECTED  reduce 17
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 209
+	method : constr ';' .  (13)
+
+	.  reduce 13
+
+
+state 210
+	method : destruct ';' .  (14)
+
+	.  reduce 14
+
+
+state 211
+	constr : NUME . '(' ')'  (8)
+	constr : NUME . '(' lista_param ')'  (9)
+
+	'('  shift 206
+	.  error
+
+
+state 212
+	methods : methods method .  (15)
+
+	.  reduce 15
+
+
+state 213
+	methods : methods . method  (15)
+	TYPE : PUBLIC declaratii methods .  (20)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 20
+	PRIVATE  reduce 20
+	PUBLIC  reduce 20
+	PROTECTED  reduce 20
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 214
+	methods : methods . method  (15)
+	TYPE : PROTECTED declaratii methods .  (23)
+
+	TIP  shift 34
+	NUME  shift 211
+	'~'  shift 164
+	ENDB  reduce 23
+	PRIVATE  reduce 23
+	PUBLIC  reduce 23
+	PROTECTED  reduce 23
+
+	constr  goto 166
+	destruct  goto 167
+	method  goto 212
+	function  goto 169
+	antet_fct  goto 16
+
+
+state 215
+	lista_apel : lista_apel ',' param_apel .  (118)
+
+	.  reduce 118
+
+
+state 216
+	cat_timp : WHILE '(' conditie ')' bloc .  (132)
+
+	.  reduce 132
+
+
+state 217
+	pas : ID . INC  (121)
+	pas : ID . DEC  (122)
+	pas : ID . ASSIGN exp  (123)
+
+	ASSIGN  shift 231
+	INC  shift 232
+	DEC  shift 233
+	.  error
+
+
+state 218
+	pentru : FOR '(' ';' ';' ')' . bloc  (131)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 234
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 219
+	pentru : FOR '(' ';' ';' pas . ')' bloc  (130)
+
+	')'  shift 235
+	.  error
+
+
+state 220
+	pentru : FOR '(' ';' conditie ';' . pas ')' bloc  (126)
+	pentru : FOR '(' ';' conditie ';' . ')' bloc  (129)
+
+	ID  shift 217
+	')'  shift 236
+	.  error
+
+	pas  goto 237
+
+
+state 221
+	pentru : FOR '(' asignare ';' ';' . pas ')' bloc  (125)
+	pentru : FOR '(' asignare ';' ';' . ')' bloc  (128)
+
+	ID  shift 217
+	')'  shift 238
+	.  error
+
+	pas  goto 239
+
+
+state 222
+	pentru : FOR '(' asignare ';' conditie . ';' pas ')' bloc  (124)
+	pentru : FOR '(' asignare ';' conditie . ';' ')' bloc  (127)
+
+	';'  shift 240
+	.  error
+
+
+state 223
+	daca : IF '(' conditie ')' bloc .  (112)
+	daca : IF '(' conditie ')' bloc . ELSE bloc  (113)
+
+	ELSE  shift 241
+	TIP  reduce 112
+	ID  reduce 112
+	ENDP  reduce 112
+	WHILE  reduce 112
+	FOR  reduce 112
+	IF  reduce 112
+	ASSIGN  reduce 112
+	ENDB  reduce 112
+	PRIVATE  reduce 112
+	PUBLIC  reduce 112
+	PROTECTED  reduce 112
+	RETURNAT  reduce 112
+	NUME  reduce 112
+	DO  reduce 112
+	BREAK  reduce 112
+	'~'  reduce 112
+
+
+state 224
+	adev : NEG '(' adev ')' .  (75)
+
+	.  reduce 75
+
+
+state 225
+	repeta : DO bloc WHILE '(' ')' . ';'  (135)
+
+	';'  shift 242
+	.  error
+
+
+state 226
+	repeta : DO bloc WHILE '(' conditie . ')' ';'  (134)
+
+	')'  shift 243
+	.  error
+
+
+state 227
+	antet_fct : TIP NUME ':' NUME '(' lista_param ')' .  (56)
+
+	.  reduce 56
+
+
+state 228
+	constr : NUME '(' ')' .  (8)
+
+	.  reduce 8
+
+
+state 229
+	constr : NUME '(' lista_param . ')'  (9)
+	lista_param : lista_param . ',' param  (51)
+
+	')'  shift 244
+	','  shift 160
+	.  error
+
+
+state 230
+	destruct : '~' NUME '(' . ')'  (10)
+	destruct : '~' NUME '(' . lista_param ')'  (11)
+
+	TIP  shift 103
+	')'  shift 245
+	.  error
+
+	lista_param  goto 246
+	param  goto 106
+
+
+state 231
+	pas : ID ASSIGN . exp  (123)
+
+	ID  shift 109
+	INTG  shift 85
+	RATIONAL  shift 86
+	NUME  shift 45
+	'('  shift 113
+	.  error
+
+	exp  goto 247
+	NR  goto 115
+	apel_fct  goto 96
+
+
+state 232
+	pas : ID INC .  (121)
+
+	.  reduce 121
+
+
+state 233
+	pas : ID DEC .  (122)
+
+	.  reduce 122
+
+
+state 234
+	pentru : FOR '(' ';' ';' ')' bloc .  (131)
+
+	.  reduce 131
+
+
+state 235
+	pentru : FOR '(' ';' ';' pas ')' . bloc  (130)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 248
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 236
+	pentru : FOR '(' ';' conditie ';' ')' . bloc  (129)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 249
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 237
+	pentru : FOR '(' ';' conditie ';' pas . ')' bloc  (126)
+
+	')'  shift 250
+	.  error
+
+
+state 238
+	pentru : FOR '(' asignare ';' ';' ')' . bloc  (128)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 251
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 239
+	pentru : FOR '(' asignare ';' ';' pas . ')' bloc  (125)
+
+	')'  shift 252
+	.  error
+
+
+state 240
+	pentru : FOR '(' asignare ';' conditie ';' . pas ')' bloc  (124)
+	pentru : FOR '(' asignare ';' conditie ';' . ')' bloc  (127)
+
+	ID  shift 217
+	')'  shift 253
+	.  error
+
+	pas  goto 254
+
+
+state 241
+	daca : IF '(' conditie ')' bloc ELSE . bloc  (113)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 255
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 242
+	repeta : DO bloc WHILE '(' ')' ';' .  (135)
+
+	.  reduce 135
+
+
+state 243
+	repeta : DO bloc WHILE '(' conditie ')' . ';'  (134)
+
+	';'  shift 256
+	.  error
+
+
+state 244
+	constr : NUME '(' lista_param ')' .  (9)
+
+	.  reduce 9
+
+
+state 245
+	destruct : '~' NUME '(' ')' .  (10)
+
+	.  reduce 10
+
+
+state 246
+	destruct : '~' NUME '(' lista_param . ')'  (11)
+	lista_param : lista_param . ',' param  (51)
+
+	')'  shift 257
+	','  shift 160
+	.  error
+
+
+state 247
+	exp : exp . OPRARM exp  (96)
+	pas : ID ASSIGN exp .  (123)
+
+	OPRARM  shift 152
+	')'  reduce 123
+
+
+state 248
+	pentru : FOR '(' ';' ';' pas ')' bloc .  (130)
+
+	.  reduce 130
+
+
+state 249
+	pentru : FOR '(' ';' conditie ';' ')' bloc .  (129)
+
+	.  reduce 129
+
+
+state 250
+	pentru : FOR '(' ';' conditie ';' pas ')' . bloc  (126)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 258
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 251
+	pentru : FOR '(' asignare ';' ';' ')' bloc .  (128)
+
+	.  reduce 128
+
+
+state 252
+	pentru : FOR '(' asignare ';' ';' pas ')' . bloc  (125)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 259
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 253
+	pentru : FOR '(' asignare ';' conditie ';' ')' . bloc  (127)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 260
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 254
+	pentru : FOR '(' asignare ';' conditie ';' pas . ')' bloc  (124)
+
+	')'  shift 261
+	.  error
+
+
+state 255
+	daca : IF '(' conditie ')' bloc ELSE bloc .  (113)
+
+	.  reduce 113
+
+
+state 256
+	repeta : DO bloc WHILE '(' conditie ')' ';' .  (134)
+
+	.  reduce 134
+
+
+state 257
+	destruct : '~' NUME '(' lista_param ')' .  (11)
+
+	.  reduce 11
+
+
+state 258
+	pentru : FOR '(' ';' conditie ';' pas ')' bloc .  (126)
+
+	.  reduce 126
+
+
+state 259
+	pentru : FOR '(' asignare ';' ';' pas ')' bloc .  (125)
+
+	.  reduce 125
+
+
+state 260
+	pentru : FOR '(' asignare ';' conditie ';' ')' bloc .  (127)
+
+	.  reduce 127
+
+
+state 261
+	pentru : FOR '(' asignare ';' conditie ';' pas ')' . bloc  (124)
+	element : .  (105)
+
+	ID  shift 39
+	WHILE  shift 40
+	FOR  shift 41
+	IF  shift 42
+	BGINB  shift 43
+	RETURNAT  shift 44
+	NUME  shift 45
+	DO  shift 46
+	BREAK  shift 47
+	ASSIGN  reduce 105
+
+	asignare  goto 49
+	bloc  goto 262
+	statement  goto 51
+	daca  goto 52
+	apel_fct  goto 53
+	pentru  goto 54
+	cat_timp  goto 55
+	repeta  goto 56
+	element  goto 23
+
+
+state 262
+	pentru : FOR '(' asignare ';' conditie ';' pas ')' bloc .  (124)
+
+	.  reduce 124
+
+
+Rules never reduced:
+	param_apel : apel_fct  (115)
+
+
+State 125 contains 2 reduce/reduce conflicts.
+
+
+43 terminals, 43 nonterminals
+136 grammar rules, 263 states
