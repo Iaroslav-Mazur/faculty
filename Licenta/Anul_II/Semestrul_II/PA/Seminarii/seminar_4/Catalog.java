@@ -27,6 +27,7 @@ class Catalog
              {
                  found = true;
                  i.display();
+                 break;
              }
          }
 

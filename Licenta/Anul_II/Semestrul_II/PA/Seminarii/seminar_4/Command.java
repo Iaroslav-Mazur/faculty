@@ -1,7 +1,7 @@
 abstract class Command
 {
-    private String prefix;
-    private Catalog catalog;
+    protected String prefix;
+    protected Catalog catalog;
     Command(String prefix, Catalog catalog)
     {
         this.prefix = prefix;

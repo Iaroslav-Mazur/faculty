@@ -3,12 +3,11 @@ class Main
 {
     public static void main(String[] args)
     {
+        Catalog catalog = new Catalog();
         ArrayList<Command> commands = new ArrayList<Command>();
-        // commands.add(new)
-        /* main 
-         * - are o lista cu commands 
-         * - apeleaza fiecare comanda in functie de cum prefix
-         * */
+        commands.add(new ListCommand(catalog));
+        commands.add(new AddCommand(catalog));
+
         String inp = "";
         Scanner sc = new Scanner(System.in);
         while(!inp.equals("q"))
@@ -16,14 +15,19 @@ class Main
             System.out.print(">> ");
             inp = sc.nextLine();
             boolean found = false;
+
             for(Command cmd : commands)
             {
                 if(inp.startsWith(cmd.getPrefix()))
                 {
                     found = true;
+                    String aux;
+                    aux = inp.substring(cmd.getPrefix().length());
                     try{
-                        cmd.run(inp);
+                        cmd.run(aux);
                     }
+                    // NOTE(mmicu): poate ar fi mai okay sa prindem 
+                    // doar CommandError si nu toata exceptia de baza 
                     catch(BaseException exp)
                     {
                         System.out.println("Exception: " + exp.toString());
