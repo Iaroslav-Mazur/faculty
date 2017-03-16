@@ -7,13 +7,44 @@ class Catalog
         this.items = new ArrayList<Item>();
     }
 
+    public void  addItem(Item i)
+    {
+        this.items.add(i);
+    }
+
+     public void removeItem(Item i)
+     {
+         this.items.remove(i);
+     }
+
+     public void show(String itemName)
+     {
+         boolean found = false;
+         // Search for the item
+         for(Item i: this.items)
+         {
+             if(i.getName().equals(itemName))
+             {
+                 found = true;
+                 i.display();
+             }
+         }
+
+         if(!found)
+         {
+             System.out.println("Nu s-a gasit nici un item cu numele "+itemName);
+         }
+     }
+
+     public ArrayList<Item> getItems()
+     {
+         return new ArrayList<Item>(this.items);
+     }
+
+
     /* To implement :
-     * addItem(Item i) aici trebuie sa avem grija sa nu existe deja un item cu acelasi nume
-     * removeItem(Item)
      * save(path)
-     * show(item_name) -> apeleaza display ( indiferent de ce ar fi acesta )
      * report # genereaza reportul html, xml, json
-     * getItems() returneaza lista de iteme pentru a le folosi in commands | va fi folosit si pentru list
      */
 
 }
