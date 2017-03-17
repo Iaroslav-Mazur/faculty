@@ -16,7 +16,7 @@ abstract class Item
         Path p = Paths.get(path);
         if(Files.exists(p))
         {
-            throw new BrokenPathException("File " + path + " nu exista !");
+            throw new BrokenPathException("File " + path + " nu exista!");
         }
 
     }
@@ -31,7 +31,7 @@ abstract class Item
         return this.name;
     }
 
-    public void getName(String name)
+    public void setName(String name)
     {
         this.name = name;
     }
